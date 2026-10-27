@@ -5,13 +5,15 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Pet {
     private String nome = "";
     private boolean vivo = true;
     private boolean dormindo = false;
     private LocalDate birthday = LocalDate.now();
     AtomicInteger segundos = new AtomicInteger(0);
-    ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    @JsonIgnore  ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private volatile double taxaSono = 0;
     private volatile double taxaFome = 0;
     private volatile double taxaFeliz = 100;
