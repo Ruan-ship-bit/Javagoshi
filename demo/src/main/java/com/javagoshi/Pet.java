@@ -18,7 +18,9 @@ public class Pet {
     private volatile double taxaFome = 0;
     private volatile double taxaFeliz = 100;
 
-    public  Pet() {}
+    public  Pet() { 
+        iniciarTimer();
+    }//Construtor Vazio para o jackson
     public boolean getAcordado() {
         return this.dormindo;
     }
@@ -117,17 +119,8 @@ public class Pet {
         return this.nome;
     }
 
-
-    
-    public Pet (String nome ) {
-        this.nome = nome;
-        this.vivo = true;
-        this.birthday = LocalDate.now();
-        this.dormindo = false;
-        this.taxaFeliz = 100;
-        this.taxaFome = 0;
-        this.taxaSono = 0;
-        this.segundos = new AtomicInteger(0);
+    public void iniciarTimer() {
+        
         this.scheduler =  Executors.newScheduledThreadPool(1);
 
         scheduler.scheduleAtFixedRate(() -> {
@@ -139,6 +132,18 @@ public class Pet {
                 
             }
         }, 0, 1, TimeUnit.SECONDS);
+    }
+    
+    public Pet (String nome ) {
+        this.nome = nome;
+        this.vivo = true;
+        this.birthday = LocalDate.now();
+        this.dormindo = false;
+        this.taxaFeliz = 100;
+        this.taxaFome = 0;
+        this.taxaSono = 0;
+        this.iniciarTimer();
+        this.segundos = new AtomicInteger(0);
     }
     
     

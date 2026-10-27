@@ -28,15 +28,17 @@ public class Menu {
     public  void salvarArquivo (Pet pet) {
         Path diretorio = Paths.get("./SaveState");
         Path caminhoArquivo = diretorio.resolve(pet.getNome() + ".json");
-        String conteudo = petSave.salvar(pet);
+        
         try {
             if(Files.notExists(diretorio)) {
                 Files.createDirectories(diretorio);
+                String conteudo = petSave.salvar(pet);
                 Files.writeString(caminhoArquivo, conteudo, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
             }
             else {
                 try {
+                    String conteudo = petSave.salvar(pet);
                     Files.writeString(caminhoArquivo, conteudo);
 
                 } catch (IOException e) {
