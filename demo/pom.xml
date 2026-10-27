@@ -12,5 +12,12 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
+    <dependencies>
+        <dependency>
+    <groupId>tools.jackson.core</groupId> <!-- Mudou de com.fasterxml... para tools.jackson... -->
+    <artifactId>jackson-databind</artifactId>
+    <version>3.2.4</version>
+        </dependency>
 
+    </dependencies>
 </project>

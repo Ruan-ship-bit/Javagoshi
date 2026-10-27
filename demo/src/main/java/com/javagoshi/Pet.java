@@ -16,7 +16,7 @@ public class Pet {
     private volatile double taxaFome = 0;
     private volatile double taxaFeliz = 100;
 
-
+    public  Pet() {}
     public boolean getAcordado() {
         return this.dormindo;
     }
