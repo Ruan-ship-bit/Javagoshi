@@ -49,6 +49,18 @@ public class Menu {
         }
     }
 
-    
+    public Pet carregarArquivo(String nome) {
+        Path diretorio = Paths.get("./SaveState");
+        Path caminhoArquivo = diretorio.resolve(nome + ".json");
+        if(Files.exists(caminhoArquivo)) {
+            try {
+                String conteudo = Files.readString(caminhoArquivo);
+                return petSave.carregar(conteudo);
+            } catch (IOException e) {
+               System.err.println("Erro ao ler o arquivo: " + e.getMessage());
+            }
+        }
+        return null;
+    }
 
 }
