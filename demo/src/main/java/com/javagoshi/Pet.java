@@ -17,6 +17,7 @@ public class Pet {
     private volatile double taxaSono = 0;
     private volatile double taxaFome = 0;
     private volatile double taxaFeliz = 100;
+    private volatile String rostoAtual = "";
 
     public  Pet() { 
         iniciarTimer();
@@ -46,27 +47,33 @@ public class Pet {
     }
 
     public void calcularFelicidade() {
-        this.taxaFeliz = 100 - (0.3*this.taxaFome + 0.1*this.taxaSono + 0.6* (this.taxaFome * this.taxaSono / 100));
+        double calculo = 100 - (0.3*this.taxaFome + 0.1*this.taxaSono + 0.6* (this.taxaFome * this.taxaSono / 100));
+        this.taxaFeliz = Math.max(0, Math.min(100, calculo));
+    }
+
+    public void setRostoAtual (String rosto) {
+        this.rostoAtual = rosto;
     }
 
     public void desenharPet () {
-        
+        Menu.limparConsole();
         if(this.taxaFeliz >= 100) {
-            System.out.println("(ºwº)");
+            this.setRostoAtual("(ºwº)");
         }
         else if(this.taxaFeliz >= 50) {
-            System.out.println("(º-º)");
+            this.setRostoAtual("(º-º)");
         }
         else if(this.taxaFeliz >= 25) {
-            System.out.println("(º/º)");
+            this.setRostoAtual("(º/º)");
         }
         else if(this.taxaFeliz >= 10) {
-            System.out.println("(T-T)");
+            this.setRostoAtual("(T-T)");
         }
         else {
-            System.out.println("(ToT)");
+            this.setRostoAtual("(ToT)");
         }
 
+        System.out.println(this.rostoAtual);
         if (this.taxaFome > 60) {
             System.out.println("To com fome e quero merendar");
         }
@@ -80,7 +87,8 @@ public class Pet {
 
     public void animacaoDormindo () {
         Menu.limparConsole();
-        System.out.println("(-.-)");
+        this.setRostoAtual("(-.-)");
+        System.out.println(this.rostoAtual);
         while(this.dormindo) {
             
             System.out.print("Z");

@@ -5,12 +5,16 @@ import java.nio.file.StandardOpenOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 public class Menu {
-    PetSave  petSave = new PetSave();
+   private Menu() {
+
+    throw new AssertionError("Não instancie esta classe!");
+   }
+    
     public static void limparConsole() {
         try {
             // Detecta o sistema operacional
             String os = System.getProperty("os.name").toLowerCase();
-
+            
             if (os.contains("win")) {
                 // No Windows, limpa chamando o CMD com o comando 'cls'
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
@@ -25,20 +29,20 @@ public class Menu {
         }
     }
 
-    public  void salvarArquivo (Pet pet) {
+    public static void salvarArquivo (Pet pet) {
         Path diretorio = Paths.get("./SaveState");
         Path caminhoArquivo = diretorio.resolve(pet.getNome() + ".json");
         
         try {
             if(Files.notExists(diretorio)) {
                 Files.createDirectories(diretorio);
-                String conteudo = petSave.salvar(pet);
+                String conteudo = PetSave.salvar(pet);
                 Files.writeString(caminhoArquivo, conteudo, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
             }
             else {
                 try {
-                    String conteudo = petSave.salvar(pet);
+                    String conteudo = PetSave.salvar(pet);
                     Files.writeString(caminhoArquivo, conteudo);
 
                 } catch (IOException e) {
@@ -57,7 +61,7 @@ public class Menu {
         if(Files.exists(caminhoArquivo)) {
             try {
                 String conteudo = Files.readString(caminhoArquivo);
-                return petSave.carregar(conteudo);
+                return PetSave.carregar(conteudo);
             } catch (IOException e) {
                System.err.println("Erro ao ler o arquivo: " + e.getMessage());
             }
