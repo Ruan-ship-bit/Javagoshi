@@ -143,6 +143,9 @@ public class Pet {
             else if(! this.acordado && tempoAtual > 0 && tempoAtual % 30 == 0 ) {
                     this.taxaFome = Math.min(100, this.getFome() + 5);
                     this.taxaSono = Math.max(0, this.getSono() - 20);
+                    if(this.taxaSono == 0) {
+                        this.acordar();; //acorda eespontaneamente
+                    }
 
             }
 
@@ -171,5 +174,8 @@ public class Pet {
         this.calcularFelicidade();
     }
     
-    
+    public void acordar () {
+        this.acordado = true;
+        this.calcularFelicidade();
+    }
 }
