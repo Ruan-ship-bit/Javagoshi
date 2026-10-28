@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Pet {
     private String nome = "";
     private boolean vivo = true;
-    private boolean dormindo = false;
+    private boolean acordado = true;
     private LocalDate birthday = LocalDate.now();
     AtomicInteger segundos = new AtomicInteger(0);
     @JsonIgnore  ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -23,7 +23,7 @@ public class Pet {
         iniciarTimer();
     }//Construtor Vazio para o jackson
     public boolean getAcordado() {
-        return this.dormindo;
+        return this.acordado;
     }
 
     public boolean getVida() {
@@ -85,11 +85,12 @@ public class Pet {
         
     }
 
-    public void animacaoDormindo () {
+    public void dormindo () {
         Menu.limparConsole();
         this.setRostoAtual("(-.-)");
+        this.acordado = false; 
         System.out.println(this.rostoAtual);
-        while(this.dormindo) {
+        while(! this.acordado) {  //Leia-se: enquanto não estiver acordado
             
             System.out.print("Z");
             try {
@@ -133,7 +134,7 @@ public class Pet {
 
         scheduler.scheduleAtFixedRate(() -> {
             int tempoAtual = this.segundos.getAndIncrement();
-             if (tempoAtual > 0 && tempoAtual % 60 == 0) {
+             if (tempoAtual > 0 && tempoAtual % 60 == 0 && this.acordado) {
                 this.taxaFome += 0.33;
                 this.taxaSono += 0.20;
                 this.calcularFelicidade();
@@ -146,7 +147,7 @@ public class Pet {
         this.nome = nome;
         this.vivo = true;
         this.birthday = LocalDate.now();
-        this.dormindo = false;
+        this.acordado = true;
         this.taxaFeliz = 100;
         this.taxaFome = 0;
         this.taxaSono = 0;
@@ -162,6 +163,6 @@ public class Pet {
         this.taxaSono = Math.min(100, this.getSono()+5);
         this.calcularFelicidade();
     }
-        
+    
     
 }
