@@ -152,9 +152,16 @@ public class Pet {
         this.taxaSono = 0;
         this.iniciarTimer();
         this.segundos = new AtomicInteger(0);
+        this.rostoAtual = "(ºwº)";
     }
     
+    public void comer(char letra) {
+        AnimacaoComer.comer(letra, this.rostoAtual);
+        this.taxaFome = Math.max(0, this.taxaFome - 20);
+
+        this.taxaSono = Math.min(100, this.getSono()+5);
+        this.calcularFelicidade();
+    }
+        
     
-        
-        
 }
