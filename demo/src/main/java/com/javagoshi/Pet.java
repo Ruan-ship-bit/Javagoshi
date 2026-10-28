@@ -140,6 +140,13 @@ public class Pet {
                 this.calcularFelicidade();
                 
             }
+            else if(! this.acordado && tempoAtual > 0 && tempoAtual % 30 == 0 ) {
+                    this.taxaFome = Math.min(100, this.getFome() + 5);
+                    this.taxaSono = Math.max(0, this.getSono() - 20);
+
+            }
+
+            
         }, 0, 1, TimeUnit.SECONDS);
     }
     
