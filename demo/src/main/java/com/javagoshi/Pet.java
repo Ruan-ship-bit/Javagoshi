@@ -11,8 +11,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Pet {
     private String nome = "";
-    private boolean vivo = true;
-    private boolean acordado = true;
+    private volatile boolean vivo = true;
+    private volatile boolean acordado = true;
     private LocalDate birthday = LocalDate.now();
     AtomicInteger segundos = new AtomicInteger(0);
     @JsonIgnore  ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -140,14 +140,16 @@ public class Pet {
              if (tempoAtual > 0 && tempoAtual % 60 == 0 && this.acordado) {
                 this.taxaFome += 0.33;
                 this.taxaSono += 0.20;
+                this.verificarMorte();
                 this.calcularFelicidade();
                 
             }
             else if(! this.acordado && tempoAtual > 0 && tempoAtual % 30 == 0 ) {
                     this.taxaFome = Math.min(100, this.getFome() + 5);
                     this.taxaSono = Math.max(0, this.getSono() - 20);
+                    this.verificarMorte();
                     if(this.taxaSono == 0) {
-                        this.acordar();; //acorda eespontaneamente
+                        this.acordar();; //acorda espontaneamente
                     }
 
             }
@@ -174,6 +176,7 @@ public class Pet {
         this.taxaFome = Math.max(0, this.taxaFome - 20);
 
         this.taxaSono = Math.min(100, this.getSono()+5);
+        this.verificarMorte();
         this.calcularFelicidade();
     }
     
@@ -190,9 +193,19 @@ public class Pet {
         for(long i = 0; i < intervaloEmMinutos; i++) {
             this.taxaFome = Math.min(100, this.getFome() + 0.33);
             this.taxaSono = Math.min(100, this.getSono() + 0.22);
-
+            this.verificarMorte();
         }
         this.ultimoAcesso = Instant.now();
+    }
+
+    public void verificarMorte() {
+        if(this.taxaFeliz == 0 || this.taxaSono == 100 || this.taxaFome == 100) {
+            this.vivo = false;
+            this.scheduler.shutdown();
+            this.rostoAtual = "(X_X)";
+        } 
+
+        
     }
 }
 
