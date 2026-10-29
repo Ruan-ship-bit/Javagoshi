@@ -30,7 +30,7 @@ public class Menu {
 
     public static void salvarArquivo (Pet pet) {
         Path diretorio = Paths.get("./SaveState");
-        Path caminhoArquivo = diretorio.resolve(pet.getNome() + ".json");
+        Path caminhoArquivo = diretorio.resolve("pet.json");
         
             try {
             // 1. Garante que a pasta existe (não faz nada se já existir)
@@ -49,9 +49,9 @@ public class Menu {
         }
     }
 
-    public Pet carregarArquivo(String nome) {
+    public Pet carregarArquivo() {
         Path diretorio = Paths.get("./SaveState");
-        Path caminhoArquivo = diretorio.resolve(nome + ".json");
+        Path caminhoArquivo = diretorio.resolve("pet.json");
         if(Files.exists(caminhoArquivo)) {
             try {
                 String conteudo = Files.readString(caminhoArquivo);
