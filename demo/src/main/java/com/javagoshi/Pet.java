@@ -1,4 +1,6 @@
 package com.javagoshi;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -18,6 +20,7 @@ public class Pet {
     private volatile double taxaFome = 0;
     private volatile double taxaFeliz = 100;
     private volatile String rostoAtual = "";
+    private Instant ultimoAcesso = Instant.now();
 
     public  Pet() { 
         iniciarTimer();
@@ -178,4 +181,19 @@ public class Pet {
         this.acordado = true;
         this.calcularFelicidade();
     }
+
+    public  void simularTempo() {
+        Instant agora = Instant.now();
+        Duration intervalo = Duration.between(this.ultimoAcesso, agora);
+        long intervaloEmMinutos = intervalo.toMinutes();
+        intervaloEmMinutos = Math.min(525600, intervaloEmMinutos);
+        for(long i = 0; i < intervaloEmMinutos; i++) {
+            this.taxaFome = Math.min(100, this.getFome() + 0.33);
+            this.taxaSono = Math.min(100, this.getSono() + 0.22);
+
+        }
+        this.ultimoAcesso = Instant.now();
+    }
 }
+
+
