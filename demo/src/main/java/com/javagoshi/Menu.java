@@ -1,7 +1,6 @@
 package com.javagoshi;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 public class Menu {
@@ -33,25 +32,20 @@ public class Menu {
         Path diretorio = Paths.get("./SaveState");
         Path caminhoArquivo = diretorio.resolve(pet.getNome() + ".json");
         
-        try {
-            if(Files.notExists(diretorio)) {
-                Files.createDirectories(diretorio);
-                String conteudo = PetSave.salvar(pet);
-                Files.writeString(caminhoArquivo, conteudo, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-
-            }
-            else {
-                try {
-                    String conteudo = PetSave.salvar(pet);
-                    Files.writeString(caminhoArquivo, conteudo);
-
-                } catch (IOException e) {
-                    System.err.println("Ocorreu um erro ao manipular o arquivo: " + e.getMessage());
-                }
-            }
+            try {
+            // 1. Garante que a pasta existe (não faz nada se já existir)
+            Files.createDirectories(diretorio);
+            
+            // 2. Serializa o objeto
+            String conteudo = PetSave.salvar(pet);
+            
+            // 3. Escreve o arquivo (cria se não existir, sobrescreve se existir)
+            Files.writeString(caminhoArquivo, conteudo);
+            
         } catch (IOException e) {
-            System.err.println("Ocorreu um erro ao manipular o arquivo: " + e.getMessage());
-            e.printStackTrace();
+            // 4. Tratamento único de erro
+            System.err.println("Erro crítico ao salvar o jogo: " + e.getMessage());
+            // Aqui você pode lançar um alerta para o jogador ou tomar outra atitude
         }
     }
 
@@ -62,8 +56,8 @@ public class Menu {
             try {
                 String conteudo = Files.readString(caminhoArquivo);
                 return PetSave.carregar(conteudo);
-            } catch (IOException e) {
-               System.err.println("Erro ao ler o arquivo: " + e.getMessage());
+            } catch (Exception e) {
+               System.err.println("Erro ao carregar o save (arquivo corrompido?): " + e.getMessage());
             }
         }
         return null;
