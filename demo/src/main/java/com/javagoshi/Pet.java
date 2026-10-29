@@ -50,8 +50,10 @@ public class Pet {
     }
 
     public void calcularFelicidade() {
-        double calculo = 100 - (0.3*this.taxaFome + 0.1*this.taxaSono + 0.6* (this.taxaFome * this.taxaSono / 100));
-        this.taxaFeliz = Math.max(0, Math.min(100, calculo));
+        if(this.vivo) {
+            double calculo = 100 - (0.3*this.taxaFome + 0.1*this.taxaSono + 0.6* (this.taxaFome * this.taxaSono / 100));
+            this.taxaFeliz = Math.max(0, Math.min(100, calculo));
+        }
     }
 
     public void setRostoAtual (String rosto) {
@@ -77,48 +79,54 @@ public class Pet {
         }
 
         System.out.println(this.rostoAtual);
-        if (this.taxaFome > 60) {
+
+
+        if(this.vivo) {
+            if (this.taxaFome > 60) {
             System.out.println("To com fome e quero merendar");
         }
 
-        if (this.taxaSono > 60) {
-            System.out.println("Quero mimir!");
+            if (this.taxaSono > 60) {
+                System.out.println("Quero mimir!");
+            }
         }
 
         
     }
 
     public void dormindo () {
-        Menu.limparConsole();
-        this.setRostoAtual("(-.-)");
-        this.acordado = false; 
-        System.out.println(this.rostoAtual);
-        while(! this.acordado) {  //Leia-se: enquanto não estiver acordado
-            
-            System.out.print("Z");
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            System.out.print("Z");
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            System.out.print("Z");
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            System.out.print("\u001B[3D   \u001B[3D");
-            System.out.flush();
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+        if(this.vivo) {
+            Menu.limparConsole();
+            this.setRostoAtual("(-.-)");
+            this.acordado = false; 
+            System.out.println(this.rostoAtual);
+            while(! this.acordado) {  //Leia-se: enquanto não estiver acordado
+                
+                System.out.print("Z");
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                System.out.print("Z");
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                System.out.print("Z");
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                System.out.print("\u001B[3D   \u001B[3D");
+                System.out.flush();
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
     }
@@ -133,29 +141,31 @@ public class Pet {
 
     public void iniciarTimer() {
         
-        this.scheduler =  Executors.newScheduledThreadPool(1);
+        if(this.vivo) {
+            this.scheduler =  Executors.newScheduledThreadPool(1);
 
-        scheduler.scheduleAtFixedRate(() -> {
-            int tempoAtual = this.segundos.getAndIncrement();
-             if (tempoAtual > 0 && tempoAtual % 60 == 0 && this.acordado) {
-                this.taxaFome += 0.33;
-                this.taxaSono += 0.20;
-                this.verificarMorte();
-                this.calcularFelicidade();
-                
-            }
-            else if(! this.acordado && tempoAtual > 0 && tempoAtual % 30 == 0 ) {
-                    this.taxaFome = Math.min(100, this.getFome() + 5);
-                    this.taxaSono = Math.max(0, this.getSono() - 20);
+            scheduler.scheduleAtFixedRate(() -> {
+                int tempoAtual = this.segundos.getAndIncrement();
+                if (tempoAtual > 0 && tempoAtual % 60 == 0 && this.acordado) {
+                    this.taxaFome += 0.33;
+                    this.taxaSono += 0.20;
                     this.verificarMorte();
-                    if(this.taxaSono == 0) {
-                        this.acordar();; //acorda espontaneamente
-                    }
+                    this.calcularFelicidade();
+                    
+                }
+                else if(! this.acordado && tempoAtual > 0 && tempoAtual % 30 == 0 ) {
+                        this.taxaFome = Math.min(100, this.getFome() + 5);
+                        this.taxaSono = Math.max(0, this.getSono() - 20);
+                        this.verificarMorte();
+                        if(this.taxaSono == 0) {
+                            this.acordar();; //acorda espontaneamente
+                        }
 
-            }
+                }
 
-            
-        }, 0, 1, TimeUnit.SECONDS);
+                
+            }, 0, 1, TimeUnit.SECONDS);
+        }
     }
     
     public Pet (String nome ) {
@@ -172,17 +182,22 @@ public class Pet {
     }
     
     public void comer(char letra) {
-        AnimacaoComer.comer(letra, this.rostoAtual);
-        this.taxaFome = Math.max(0, this.taxaFome - 20);
+        if(this.vivo) {
+            AnimacaoComer.comer(letra, this.rostoAtual);
+            this.taxaFome = Math.max(0, this.taxaFome - 20);
 
-        this.taxaSono = Math.min(100, this.getSono()+5);
-        this.verificarMorte();
-        this.calcularFelicidade();
+            this.taxaSono = Math.min(100, this.getSono()+5);
+            this.verificarMorte();
+            this.calcularFelicidade();
+        }
     }
     
     public void acordar () {
-        this.acordado = true;
-        this.calcularFelicidade();
+        if(this.vivo ) {
+            this.acordado = true;
+            this.calcularFelicidade();
+        }
+  
     }
 
     public  void simularTempo() {
