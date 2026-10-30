@@ -149,8 +149,8 @@ public class Pet {
                 if (tempoAtual > 0 && tempoAtual % 60 == 0 && this.acordado) {
                     this.taxaFome += 0.33;
                     this.taxaSono += 0.20;
-                    this.verificarMorte();
                     this.calcularFelicidade();
+                    
                     
                 }
                 else if(! this.acordado && tempoAtual > 0 && tempoAtual % 30 == 0 ) {
@@ -187,8 +187,9 @@ public class Pet {
             this.taxaFome = Math.max(0, this.taxaFome - 20);
 
             this.taxaSono = Math.min(100, this.getSono()+5);
-            this.verificarMorte();
+            
             this.calcularFelicidade();
+            this.verificarMorte();
         }
     }
     
