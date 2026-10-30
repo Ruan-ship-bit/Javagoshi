@@ -1,8 +1,10 @@
 package com.javagoshi;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Scanner;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
 public class Menu {
    private Menu() {
 
@@ -49,7 +51,7 @@ public class Menu {
         }
     }
 
-    public Pet carregarArquivo() {
+    public static Pet carregarArquivo() {
         Path diretorio = Paths.get("./SaveState");
         Path caminhoArquivo = diretorio.resolve("pet.json");
         if(Files.exists(caminhoArquivo)) {
@@ -61,6 +63,49 @@ public class Menu {
             }
         }
         return null;
+    }
+
+   public static void carregando() {
+        final int total = 20;
+        final int passoMs = 5000 / total; // 20 passos x 250 ms = 5 segundos
+
+        System.out.print("\u001B[?25l"); // esconde o cursor
+        try {
+            for (int i = 0; i <= total; i++) {
+                int percentual = i * 100 / total;
+                String barra = "#".repeat(i) + "-".repeat(total - i);
+                System.out.print("\r\u001B[KCarregando [" + barra + "] " + percentual + "%");
+                System.out.flush();
+                if (i < total) {
+                    Thread.sleep(passoMs);
+                }
+            }
+            System.out.println();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } finally {
+            System.out.print("\u001B[?25h"); // mostra o cursor de novo
+            System.out.flush();
+        }
+    }
+
+    public static  Pet criarPetSeNaoExiste () {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Olá Bem vindo ao Javagoshi! Seu bichinho virtual feito em Java!");
+            System.out.println("Qual o nome do seu Javagoshi?");
+            String nome = scanner.nextLine();
+            while (nome.trim().isEmpty()) {
+                System.out.println("NOME NÃO PODE SER VAZIO! TENTE NOVAMENTE:");
+                nome = scanner.nextLine();
+            }
+           
+            System.out.println("Criando seu pet");
+            Pet pet = new Pet(nome);
+            Menu.carregando();
+            scanner.close();
+            Menu.limparConsole();
+            return pet;
+            
     }
 
 }
