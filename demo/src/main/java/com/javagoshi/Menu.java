@@ -102,7 +102,7 @@ public class Menu {
             System.out.println("Criando seu pet");
             Pet pet = new Pet(nome);
             Menu.carregando();
-            scanner.close();
+           
             Menu.limparConsole();
             return pet;
             

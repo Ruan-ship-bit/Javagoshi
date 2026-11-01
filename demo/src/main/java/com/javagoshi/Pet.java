@@ -15,7 +15,7 @@ public class Pet {
     private volatile boolean acordado = true;
     private LocalDate birthday = LocalDate.now();
     AtomicInteger segundos = new AtomicInteger(0);
-    @JsonIgnore  ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    @JsonIgnore private  ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private volatile double taxaSono = 0;
     private volatile double taxaFome = 0;
     private volatile double taxaFeliz = 100;
@@ -29,7 +29,7 @@ public class Pet {
         return this.acordado;
     }
 
-    public boolean getVida() {
+    public boolean getVivo() {
         return this.vivo;
     }
 
@@ -62,11 +62,9 @@ public class Pet {
 
     public void desenharPet () {
         Menu.limparConsole();
-        if(this.taxaFeliz >= 100) {
-            this.setRostoAtual("(ºwº)");
-        }
-        else if(this.taxaFeliz >= 50) {
-            this.setRostoAtual("(º-º)");
+     
+         if(this.taxaFeliz >= 50) {
+            this.setRostoAtual("(ºWº)");
         }
         else if(this.taxaFeliz >= 25) {
             this.setRostoAtual("(º/º)");
@@ -94,42 +92,33 @@ public class Pet {
         
     }
 
-    public void dormindo () {
-        if(this.vivo) {
-            Menu.limparConsole();
-            this.setRostoAtual("(-.-)");
-            this.acordado = false; 
-            System.out.println(this.rostoAtual);
-            while(! this.acordado) {  //Leia-se: enquanto não estiver acordado
-                
-                System.out.print("Z");
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-                System.out.print("Z");
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-                System.out.print("Z");
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-                System.out.print("\u001B[3D   \u001B[3D");
-                System.out.flush();
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+    public void dormindo() {
+        if (!this.vivo) {
+            return;
+        }
+        Menu.limparConsole();
+        this.setRostoAtual("(-.-)");
+        this.acordado = false;
+        System.out.println(this.rostoAtual);
+
+        String[] quadros = {"Z", "ZZ", "ZZZ", ""};
+        int i = 0;
+
+        while (!this.acordado) { // enquanto não estiver acordado
+            System.out.print("\r\u001B[K" + quadros[i]);
+            System.out.flush();
+            i = (i + 1) % quadros.length;
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
             }
         }
-    }
+
+        System.out.print("\r\u001B[K"); // limpa a linha ao acordar
+        System.out.flush();
+}
 
     public void setNome(String nome) {
         this.nome = nome;
@@ -149,8 +138,8 @@ public class Pet {
                 if (tempoAtual > 0 && tempoAtual % 60 == 0 && this.acordado) {
                     this.taxaFome += 0.33;
                     this.taxaSono += 0.20;
-                    this.verificarMorte();
                     this.calcularFelicidade();
+                    
                     
                 }
                 else if(! this.acordado && tempoAtual > 0 && tempoAtual % 30 == 0 ) {
@@ -187,8 +176,9 @@ public class Pet {
             this.taxaFome = Math.max(0, this.taxaFome - 20);
 
             this.taxaSono = Math.min(100, this.getSono()+5);
-            this.verificarMorte();
+            
             this.calcularFelicidade();
+            this.verificarMorte();
         }
     }
     
@@ -221,6 +211,18 @@ public class Pet {
         } 
 
         
+    }
+
+    public String getRostoAtual() {
+        return this.rostoAtual;
+    }
+
+    public Instant getUltimoAcesso() {
+    return this.ultimoAcesso;
+}
+
+    public void pararTempo() {
+        this.scheduler.shutdown();
     }
 }
 
