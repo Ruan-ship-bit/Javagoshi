@@ -4,15 +4,16 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        //Pet petAtual = (Menu.carregarArquivo() == null) ? Menu.criarPetSeNaoExiste() : Menu.carregarArquivo();
+       
+        Scanner scanner = new Scanner(System.in);
         Pet petAtual = Menu.carregarArquivo();
         if(petAtual != null) {
             petAtual.simularTempo();
         }
         else {
-            petAtual = Menu.criarPetSeNaoExiste();
+            petAtual = Menu.criarPetSeNaoExiste(scanner);
         }
-        Scanner scanner = new Scanner(System.in);
+        
         char entrada;
         while(petAtual.getVivo()) {
             Menu.limparConsole();

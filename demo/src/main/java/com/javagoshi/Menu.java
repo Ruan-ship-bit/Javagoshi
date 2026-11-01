@@ -89,8 +89,8 @@ public class Menu {
         }
     }
 
-    public static  Pet criarPetSeNaoExiste () {
-            Scanner scanner = new Scanner(System.in);
+    public static  Pet criarPetSeNaoExiste (Scanner scanner) {
+            
             System.out.println("Olá Bem vindo ao Javagoshi! Seu bichinho virtual feito em Java!");
             System.out.println("Qual o nome do seu Javagoshi?");
             String nome = scanner.nextLine();
