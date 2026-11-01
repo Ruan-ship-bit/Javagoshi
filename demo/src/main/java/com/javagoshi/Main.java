@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-       
+        Menu.limparConsole();
         Scanner scanner = new Scanner(System.in);
         Pet petAtual = Menu.carregarArquivo();
         if(petAtual != null) {
