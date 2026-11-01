@@ -43,7 +43,7 @@ public class Main {
                     scanner.nextLine(); //esse de fato faz a pausa pro usuario ler a mensagem
                     Menu.limparConsole();
                     petAtual.dormindo();
-                    letra = scanner.next().charAt(0);
+                    
                    
                     
                     

@@ -147,7 +147,8 @@ public class Pet {
                         this.taxaSono = Math.max(0, this.getSono() - 20);
                         this.verificarMorte();
                         if(this.taxaSono == 0) {
-                            this.acordar();; //acorda espontaneamente
+                            this.acordar(); //acorda espontaneamente
+                            
                         }
 
                 }
@@ -186,6 +187,7 @@ public class Pet {
         if(this.vivo ) {
             this.acordado = true;
             this.calcularFelicidade();
+            this.desenharPet();
         }
   
     }
